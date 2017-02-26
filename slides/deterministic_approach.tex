@@ -1,0 +1,292 @@
+\section{Deterministic approach}
+\begin{frame} 
+	\frametitle{Estimation of speed from position measurements} 
+	Consider a car and a (quite inaccurate) model of it
+	\begin{columns}[onlytextwidth,t]
+		\column{.4\textwidth}
+		\begin{figure}[h]
+			\includegraphics[width=\textwidth]{fig/auto_real}%
+			\caption*{The car we want to model.\footnotemark} 
+		\end{figure}
+		\column{.55\textwidth}
+		\begin{block}{The (quite inaccurate) model}
+		Position at time $t$: $(\zeta(t), \xi(t))$ \\%{\footnotesize ($x$ and $y$  will be used later with different a meaning)}\\
+		Equations of motion:
+		\begin{align*}
+		  \ddot{\xi}(t)& = \frac{1}{M} u_1(t) \\
+		  \ddot{\zeta}(t)& = \frac{1}{M} u_2(t)
+		\end{align*}
+		\end{block}
+	\end{columns}
+	
+	where 
+	\begin{itemize}
+		\item $M$ mass of the particle/car\\
+		\item $u_1(t), u_2(t)$ change in acceleration. \textbf{This is the control input}\\
+        \phantom{x}
+	\end{itemize}
+	\footnotetext{\href{https://commons.wikimedia.org/wiki/File\%3A2015_BMW_i8_(20039281571)_(2).jpg}{\tiny{Image by Edvvc from London, UK (2015 BMW i8)}}}
+\end{frame}
+
+\begin{frame} 
+	\frametitle{Model rewriting}
+	It will be convenient in the following, to rewrite the model in a more standard form
+    \begin{columns}[onlytextwidth]
+    \column{.25\textwidth}
+        \begin{align*}
+        \ddot{\xi}(t)& = \frac{1}{M} u_1(t) \\
+        \ddot{\zeta}(t)& = \frac{1}{M} u_2(t)
+        \end{align*}
+    \column{.1\textwidth}
+    \begin{tikzpicture}
+        \draw [myarrows] (0, 0) -- (1, 0);
+    \end{tikzpicture}
+    \column{.8\textwidth}
+    	\begin{align*}
+    	  \mat{\dot{\xi}\\\ddot{\xi}\\\dot{\zeta}\\\ddot{\zeta}}&=
+          \mat{0&1&0&0\\0&0&0&0\\0&0&0&1\\0&0&0&0}\mat{\xi\\\dot{\xi}\\{\zeta}\\\dot{\zeta}} + \mat{0&0\\ \frac{1}{M} &0\\0&0 \\0&\frac{1}{M}} \mat{u_1(t)\\u_2(t)}\\
+          \mat{y_1(t)\\y_2(t)}&=\mat{1&0&0&0\\0&0&1&0}\mat{\xi\\\dot{\xi}\\{\zeta}\\\dot{\zeta}}
+    	\end{align*}
+    \end{columns}
+\end{frame}
+
+\begin{frame} 
+    \frametitle{Model rewriting}
+    It will be convenient in the following, to rewrite the model in a more standard form
+    \begin{columns}[onlytextwidth]
+        \column{.2\textwidth}
+        \begin{align*}
+        \ddot{\xi}(t)& = \frac{1}{M} u_1(t) \\
+        \ddot{\zeta}(t)& = \frac{1}{M} u_2(t)
+        \end{align*}
+        \vspace*{2em}
+        \column{.1\textwidth}
+        \begin{center}
+           \begin{tikzpicture}
+           \draw [myarrows] (0, 0) -- (1, 0);
+           \end{tikzpicture} 
+        \end{center}
+        \vspace*{1em}
+        \column{.6\textwidth}
+        \begin{align*}
+        \mat{\dot{\xi}\\\ddot{\xi}\\\dot{\zeta}\\\ddot{\zeta}} 
+        &=
+        \mat{0&1&0&0\\0&0&0&0\\0&0&0&1\\0&0&0&0}
+        \tikz[baseline]{
+            \node[fill=blue!10,anchor=base,rounded corners] (state)
+            {$\mat{{\xi}\\\dot{\xi}\\{\zeta}\\\dot{\zeta}}$};
+        }
+        + 
+        \mat{0&0\\ \frac{1}{M} &0\\0&0 \\0&\frac{1}{M}} 
+        \tikz[baseline]{
+            \node[fill=blue!10,anchor=base,rounded corners] (input)
+            {$\mat{u_1(t)\\u_2(t)}$};
+        }\\
+        \tikz[baseline]{
+            \node[fill=blue!10,anchor=base,rounded corners] (output)
+            {$\mat{y_1(t)\\y_2(t)}$};
+        }
+        &=\mat{1&0&0&0\\0&0&1&0}\mat{\xi\\\dot{\xi}\\{\zeta}\\\dot{\zeta}}
+        \end{align*}
+        
+        
+        \begin{minipage}{5cm}\hfill\end{minipage}
+        \begin{minipage}{3cm}
+        \tikz[na]\node (statedef) {$\bm{x}(t)$: state};\vspace{-0.8em} 
+        \tikz[na]\node (inputdef) {$\bm{u}(t)$: input};\vspace{-0.8em}
+        \tikz[na]\node (outputdef) {$\bm{y}(t)$: output}; 
+        \end{minipage}        
+    \end{columns}
+    \begin{tikzpicture}[overlay]
+        \path[->](state) edge (statedef);
+        \path[->](input) edge [out=-90, in=0] (inputdef);
+        \path[->](output) edge [out=-90, in=-180] (outputdef);
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame} 
+    \frametitle{State space form}
+    The names $A$, $B$, $C$ are often used in state space form. We can write 
+    \begin{align*}
+    \dot{\bm{x}}(t) &= A \bm{x}(t) + B \bm{u}(t)\\
+    \bm{y}(t) &= C \bm{x} (t)
+    \end{align*}
+    \begin{columns}    %[onlytextwidth,t]
+    \column{.4\textwidth}
+        where 
+        \begin{itemize}
+            \item ${\bm{x}}(t)=\mat{{\xi}\\\dot{\xi}\\{\zeta}\\\dot{\zeta}}$ state of the system
+            \item ${\bm{y}}(t)=\mat{y_1(t)\\y_2(t)}$ measured output
+            \item ${\bm{u}}(t)=\mat{u_1(t)\\u_2(t)}$ input
+        \end{itemize}
+    \column{.5\textwidth}
+    A graphical representation can be given as
+    %\begin{block}
+        \begin{tikzpicture}[auto,  >=latex']
+        \node [input, name=input] {};
+        \node [block, right of=input] (blockB) {$B$};
+        \node [sum, right of=blockB] (sum) {};
+        \node [input, right of=sum] (dstate) {$\frac{1}{s}$};
+        \node [block, right of=dstate] (integrator) {$\frac{1}{s}$};
+        \node [input, right of=integrator] (state) {};
+        \node [block, right of=state] (blockC) {$C$};
+        \node [block, below of=integrator] (blockA) {$A$};
+        \node [output, right of=blockC] (output) {};
+        
+        \draw [draw,->] (input) -- node {$\bm{u}(t)$} (blockB);
+        \draw [->] (blockB) -- node {} (sum);
+        \draw [->] (sum) -- node {$\dot{\bm{x}}(t)$} (integrator);
+        \draw [->] (integrator) -- node {$\bm{x}(t)$} (blockC);
+        \draw [->] (blockC) -- node [name=y] {  $\bm{y}(t)$}(output);
+        \draw [->] (state) |- node {}(blockA);
+        \draw [->] (blockA) -| node[pos=0.99] {$+$} 
+        node [near end] {} (sum);
+        \end{tikzpicture}
+    %\end{block}
+    
+    Simplified form
+    
+         \begin{tikzpicture}[auto,  >=latex']
+         \node [input, name=input] {};
+         \node [block, right of=input] (blockAB) {$A$, $B$};
+         \node [input, right of=blockAB] (state) {$x(t)$};
+         \node [block, right of=state] (blockC) {$C$};
+         \node [output, right of=blockC] (output) {$y(t)$};
+         
+         \draw [draw,->] (input) -- node {$\bm{u}(t)$} (blockAB);
+         \draw [->] (blockAB) -- node {$\bm{x}(t)$} (blockC);
+         \draw [->] (blockC) -- node [name=y] {$\bm{y}(t)$}(output);
+         \end{tikzpicture}
+    \end{columns}
+\end{frame}
+
+\begin{frame} 
+    \frametitle{Conversion to discrete time}
+    Our estimator will be as a discrete time system. We rewrite our original model as a discrete time system. 
+    
+    \begin{itemize}
+        \item $\Delta t$ denotes the length sampling interval
+        \item $t_0$ initial time stamp
+        \item ${\bm{x}}(k)$ is the $k^{th}$ samples of the state, i.e., $\bm{x}(k)=\bm{x}(t_0+k\Delta t)$. Similar notation for input and output
+        \item $A_d$: discrete time version of the matrix $A$
+        \item $B_d$: discrete time version of the matrix $B$
+    \end{itemize}
+     
+    \begin{columns}[onlytextwidth]
+        \column{.4\textwidth}
+        \begin{block}{Continuous time}
+            \vspace*{-1em}
+            \begin{align*}
+            \dot{\bm{x}}(t) &= A \bm{x}(t) + B \bm{u}(t)\\
+            \bm{y}(t) &= C \bm{x}(t) 
+            \end{align*}
+        \end{block}    
+        \column{.1\textwidth}
+        \begin{tikzpicture}
+        \draw [myarrows] (0, 0) -- (1, 0);
+        \end{tikzpicture}
+        \column{.4\textwidth}
+        \begin{block}{Discrete time}
+            \vspace*{-1em}
+            \begin{align*}
+            \bm{x}(k+1) &= A_d \bm{x}(k) + B_d \bm{u}(k)\\
+            \bm{y}(k) &= C \bm{x}(k) 
+            \end{align*}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Estimation approaches}
+    \begin{itemize}
+        \item The position of the car is available at every step $k$. Speed could be estimated by numerical differentiation (Numerical differentiation)
+        \item We could try to estimate the \emph{whole} state of the system and then, to extract the speed of the car from the estimated state (Observer approach)
+    \end{itemize}
+     \begin{columns}[t]
+        \column{.5\textwidth}
+        \begin{block}{1. Numerical differentiation}
+            \vspace*{-1em}
+            \begin{align*}
+            \hat{\dot{\xi}}(k)& = \frac{y_1(k) - y_1(k-1)}{\Delta t}\\
+            \hat{\dot{\zeta}}(k)& = \frac{y_2(k) - y_2(k-1)}{\Delta t}
+            \end{align*}
+        \end{block}
+        \column{.5\textwidth}
+        \begin{block}{2. Observer}
+            First element of the estimated state
+            $$\hat{\dot{\xi}}(k)= \hat{x}_1(k)$$
+            Third element of the estimated state
+            $$\hat{\dot{\zeta}}(k)=\hat{x}_3(k)$$
+        \end{block}	
+    \end{columns} 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Observer derivation}
+    Assume we know the following
+    \begin{itemize}
+        \item Model and parameters of the system are known
+        \item Input and output are measured without measurement noise
+        \item An initial estimate of the state is known
+    \end{itemize}
+    We could consider then the following equations
+    \begin{align*}
+    \hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k)\\
+    \hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) 
+    \end{align*}
+    
+\end{frame}
+
+\begin{frame}
+    \frametitle{Luenberger observer}
+    Main idea: use the error in the measured variable for correcting the estimated state
+    
+    New equations of the observer\\
+    \begin{minipage}{0.6\textwidth}
+        \begin{align*}
+        \hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
+            \tikz[baseline]{
+            \node[fill=blue!10,anchor=base,rounded corners] (corr_term)
+            {$L(\bm{y}(k)-\hat{\bm{y}}(k))$};}\\
+        \hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) 
+        \end{align*}
+    \end{minipage}
+    \begin{minipage}{0.3\textwidth}
+        \tikz[na]\node (descr) {Correcting term}; 
+    \end{minipage}
+    \begin{tikzpicture}[overlay]
+        \path[->](corr_term) edge (descr);
+    \end{tikzpicture}\\[1em] 
+    
+    %We can rewrite
+    %$$
+    %\hat{\bm{x}}(k+1) = A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
+    %L(C\bm{x}(k)-C\hat{\bm{x}}(k)) =  (A_d - LC) \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
+    %LC\bm{x}(k)
+    %$$
+    Consider now the error on the estimated state: $\tilde{\bm{x}}(k)=\bm{x}(k)-\hat{\bm{x}}(k)$. We can write\\[-0.5em]
+    %\begin{align*}%\begin{align*}\end{align*}
+        %\hat{\bm{x}}(k+1)-\bm{x}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) -  
+        %A_d \hat{\bm{x}}(k) - B_d \bm{u}(k) - L(\bm{y}(k)-\hat{\bm{y}}(k))\\
+        
+        %\tilde{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
+        %A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
+        
+        %\tilde{\bm{x}}(k+1) &= (A_d - LC)-(A_d-LC) \hat{\bm{x}}(k) = 
+        %(A_d - LC)\tilde{\bm{x}}(k+1)
+    %\end{align*}$$
+    \begin{align*}
+        \hat{\bm{x}}(k+1)-\bm{x}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) -  
+        A_d \hat{\bm{x}}(k) - B_d \bm{u}(k) - L(\bm{y}(k)-\hat{\bm{y}}(k))\\
+        \tilde{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
+        A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
+        \tilde{\bm{x}}(k+1) &= (A_d - LC)\bm{x}(k)-(A_d-LC) \hat{\bm{x}}(k) \\ 
+         \tilde{\bm{x}}(k+1)&=(A_d - LC)\tilde{\bm{x}}(k+1)
+    \end{align*}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example}
+    Show movie in (x,y) with the effects of the two estimators
+\end{frame}
+	

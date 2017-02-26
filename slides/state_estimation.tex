@@ -1,0 +1,64 @@
+\documentclass[aspectratio=169, fleqn, 10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+
+\usepackage{caption} % add the caption* command
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usetikzlibrary{arrows,shapes}
+
+% beamer conf
+\usetheme{Warsaw}%{Pittsburgh}%%{CambridgeUS}%{default}%
+\usecolortheme{seahorse}
+\usefonttheme{professionalfonts}
+
+%tikz configuration
+\usetikzlibrary{arrows,matrix,positioning,fit}
+\tikzset{highlight/.style={rectangle,rounded corners,fill=red!15,draw,fill opacity=0.5,thick,inner sep=0pt}}
+\newcommand{\tikzmark}[2]{\tikz[overlay,remember picture,baseline=(#1.base)] \node (#1) {#2};}
+%
+\newcommand{\Highlight}[1][submatrix]{%
+    \tikz[overlay,remember picture]{
+        \node[highlight,fit=(left.north west) (right.south east)] (#1) {};}
+}
+
+%setbeamercovered{transparent}
+%setbeamertemplate{navigation symbols}{}
+
+\newcommand{\mat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+\title{Heuristic on state estimation}
+\author{Luca Parolini}
+\date{\today}
+
+\begin{document}
+	
+% code taken from http://www.texample.net/tikz/examples/beamer-arrows/
+% For every picture that defines or uses external nodes, you'll have to
+% apply the 'remember picture' style. To avoid some typing, we'll apply
+% the style to all pictures.
+\tikzstyle{every picture}+=[remember picture]
+\tikzstyle{myarrows}=[line width=1mm,draw=blue!20,fill opacity=0.8,-triangle 45,postaction={draw, line width=3mm, shorten >=4mm, -}]
+\tikzstyle{na} = [baseline=-.5ex]
+\tikzstyle{block} = [draw, fill=blue!20, rectangle, minimum width=2em] %, 
+\tikzstyle{sum} = [draw, fill=blue!20, circle] %, node distance=1cm
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+%\everymath{\displaystyle}
+
+\maketitle
+%\frame{\tableofcontents[currentsection]}
+\input{deterministic_approach}
+
+\end{document}
+	
