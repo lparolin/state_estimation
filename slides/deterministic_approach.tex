@@ -236,6 +236,46 @@
     \end{align*}
     
 \end{frame}
+\begin{frame}
+	\frametitle{Example}
+	Show movie in (x,y) with the effects of the two estimators and the problem 
+\end{frame}
+
+\begin{frame}
+	\frametitle{Luenberger observer}
+	Main idea: use the error in the measured variable for correcting the estimated state
+	
+	New equations of the observer\\
+	\begin{minipage}{0.6\textwidth}
+		\begin{align*}
+		\hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
+		\tikz[baseline]{
+			\node[fill=blue!10,anchor=base,rounded corners] (corr_term)
+			{$L(\bm{y}(k)-\hat{\bm{y}}(k))$};}\\
+		\hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) 
+		\end{align*}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}
+		\tikz[na]\node (descr) {Correcting term}; 
+	\end{minipage}
+	\begin{tikzpicture}[overlay]
+	\path[->](corr_term) edge (descr);
+	\end{tikzpicture}\\[2em] 
+	\pause
+	Consider now the error on the estimated state: $\tilde{\bm{x}}(k)=\bm{x}(k)-\hat{\bm{x}}(k)$. We can write\\[-1.5em]
+	\begin{align*}
+	\hat{\bm{x}}(k+1)-\bm{x}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) -  
+	A_d \hat{\bm{x}}(k) - B_d \bm{u}(k) - L(\bm{y}(k)-\hat{\bm{y}}(k))\\
+	\tilde{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
+	A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
+	\tilde{\bm{x}}(k+1) &= (A_d - LC)\bm{x}(k)-(A_d-LC) \hat{\bm{x}}(k) \\ 
+	\tilde{\bm{x}}(k+1)&=(A_d - LC)\tilde{\bm{x}}(k1) 
+	\end{align*}
+	
+	\pause
+	The equation can be rewritten as\hfill \\
+	$\qquad\tilde{\bm{x}}(k)=(A_d-LC)^k\tilde{\bm{x}}(0)$
+\end{frame}
 
 \begin{frame}
     \frametitle{Luenberger observer}
@@ -256,35 +296,43 @@
     \end{minipage}
     \begin{tikzpicture}[overlay]
         \path[->](corr_term) edge (descr);
-    \end{tikzpicture}\\[1em] 
-    
-    %We can rewrite
-    %$$
-    %\hat{\bm{x}}(k+1) = A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
-    %L(C\bm{x}(k)-C\hat{\bm{x}}(k)) =  (A_d - LC) \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
-    %LC\bm{x}(k)
-    %$$
-    Consider now the error on the estimated state: $\tilde{\bm{x}}(k)=\bm{x}(k)-\hat{\bm{x}}(k)$. We can write\\[-0.5em]
-    %\begin{align*}%\begin{align*}\end{align*}
-        %\hat{\bm{x}}(k+1)-\bm{x}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) -  
-        %A_d \hat{\bm{x}}(k) - B_d \bm{u}(k) - L(\bm{y}(k)-\hat{\bm{y}}(k))\\
-        
-        %\tilde{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
-        %A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
-        
-        %\tilde{\bm{x}}(k+1) &= (A_d - LC)-(A_d-LC) \hat{\bm{x}}(k) = 
-        %(A_d - LC)\tilde{\bm{x}}(k+1)
-    %\end{align*}$$
+    \end{tikzpicture}\\[2em] 
+    Consider now the error on the estimated state: $\tilde{\bm{x}}(k)=\bm{x}(k)-\hat{\bm{x}}(k)$. We can write\\[-1.5em]
     \begin{align*}
         \hat{\bm{x}}(k+1)-\bm{x}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) -  
         A_d \hat{\bm{x}}(k) - B_d \bm{u}(k) - L(\bm{y}(k)-\hat{\bm{y}}(k))\\
         \tilde{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
         A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
         \tilde{\bm{x}}(k+1) &= (A_d - LC)\bm{x}(k)-(A_d-LC) \hat{\bm{x}}(k) \\ 
-         \tilde{\bm{x}}(k+1)&=(A_d - LC)\tilde{\bm{x}}(k+1)
+        \tilde{\bm{x}}(k+1)&= \tikz[baseline]{\node[fill=blue!10,anchor=base,rounded corners](dyn_err){$(A_d - LC)$};}\tilde{\bm{x}}(k1) \tikz[baseline]{\node[fill=blue!10,anchor=base,rounded corners](no_input){+ \phantom{x}};}
     \end{align*}
+
+	The equation can be rewritten as\hfill \tikz[na]\node (no_input_comment) {No dependency on input};\\
+	$\qquad\tilde{\bm{x}}(k)=(A_d-LC)^k\tilde{\bm{x}}(0)$\hfill \tikz[na]\node (comment) {Dynamics of the state estimation error};
+	\begin{tikzpicture}[overlay]
+		\path[->] (no_input_comment) edge (no_input);
+		\path[->] (comment) edge (dyn_err);
+	\end{tikzpicture}
 \end{frame}
 
+\begin{frame}
+	\frametitle{Scalar case}
+	We focus on the simplified case, where the state is a scalar: $\tilde{x}(k+1)= (a_d-lc)\tilde{x}(k)$
+	
+	In this case %$x(k)=(a_d-lc)^k
+	\begin{itemize}
+		\item The value of the error at time $k=0$ is unknown
+		\item If $|a_d-lc|<1$, then it is guaranteed that $|\tilde{x}(k+1)< |\tilde{x}(k)|$
+		\item As $k$ grows, it is guaranteed that $|\tilde{x}(k)|$ decreases towards 0
+	\end{itemize}
+
+	The non-scalar case requires all eigenvalues of $A_d-LC$ have absolute value smaller than 1.\\
+	
+	
+	
+	\insertimptext{Convergency is guranteed\\ for all values of $\tilde{\bm{x}}(0)$}
+	
+\end{frame}
 \begin{frame}
     \frametitle{Example}
     Show movie in (x,y) with the effects of the two estimators
