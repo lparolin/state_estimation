@@ -319,18 +319,22 @@
 	\frametitle{Scalar case}
 	We focus on the simplified case, where the state is a scalar: $\tilde{x}(k+1)= (a_d-lc)\tilde{x}(k)$
 	
-	In this case %$x(k)=(a_d-lc)^k
+	%In this case %$x(k)=(a_d-lc)^k
 	\begin{itemize}
 		\item The value of the error at time $k=0$ is unknown
 		\item If $|a_d-lc|<1$, then it is guaranteed that $|\tilde{x}(k+1)< |\tilde{x}(k)|$
 		\item As $k$ grows, it is guaranteed that $|\tilde{x}(k)|$ decreases towards 0
 	\end{itemize}
 
-	The non-scalar case requires all eigenvalues of $A_d-LC$ have absolute value smaller than 1.\\
+	The non-scalar case requires all eigenvalues of $A_d-LC$ have absolute value smaller than 1.
+	
+	\begin{figure}[b]
+		\includegraphics[width=0.8\textwidth]{fig/exponential_decay}
+		\caption*{Exponential decay for different values of $a_d-lc$.}
+	\end{figure}
 	
 	
-	
-	\insertimptext{Convergency is guranteed\\ for all values of $\tilde{\bm{x}}(0)$}
+	%\insertimptext{Convergency is guranteed for all values of $\tilde{\bm{x}}(0)$}
 	
 \end{frame}
 \begin{frame}
