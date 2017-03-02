@@ -17,18 +17,18 @@ class TrueModel:
         a22 = 1.0
 
         # input matrix along a coordinate B = b1 b2
-        b1 = (self.__sample_time**2) / 2.0
-        b2 = 1
+        b1 = (self.__sample_time * self.__sample_time) / 2.0
+        b2 = self.__sample_time
 
         new_position = a11*position + a12*speed + b1 * acceleration
         new_speed = a21*position + a22*speed + b2 * acceleration
         return (new_position, new_speed)
 
     def get_state(self):
-        return (self.get_position.get_x(),
-                self.get_speed.get_x(),
-                self.get_speed.get_y(),
-                self.get_position.get_y()
+        return (self.get_position().get_x(),
+                self.get_speed().get_x(),
+                self.get_position().get_y(),
+                self.get_speed().get_y()
                 )
 
     def set_state(self, state):
@@ -80,15 +80,9 @@ class Observer(TrueModel):
         super(Observer, self).__init__(initial_position, initial_speed, sample_time)
         self.__gain = gain
 
-    def get_estimated_position(self):
-        return self.__position
-
-    def get_estimated_speed(self):
-        return self.__speed
-
     def get_estimation(self, acceleration, position):
-        previous_estimated_position = self.get_estimated_speed()
-        super(Observer, self).update_state(acceleration)
+        previous_estimated_position = self.get_position()
+        self.update_state(acceleration)
         # now we need to include the effect of knowing the position
         # in order to improve the estimate state
         # gain is [l11, l12; l21 l22; l31 l32; l41 l42]

@@ -27,12 +27,31 @@ class Coordinate2d:
 
     def __add__(self, other):
         if isinstance(other, Coordinate2d):
-            self.__x = self.__x + other.get_x()
-            self.__y = self.__y + other.get_y()
+            X = self.__x + other.get_x()
+            Y = self.__y + other.get_y()
         else:
             # assume it is numeric
-            self.__x = self.__x + other
-            self.__y = self.__y + other
+            X = self.__x + other
+            Y = self.__y + other
+
+        return Coordinate2d(X, Y)
+
+    def __eq__(self, other):
+        is_equal = False
+        if isinstance(other, Coordinate2d):
+            is_equal = \
+                (self.get_x() == other.get_x()) and \
+                (self.get_y() == other.get_y())
+        return is_equal
+
+    def __neq__(self, other):
+        return not self == other
+
+    def __neg__(self):
+        X = -self.__x
+        Y = -self.__y
+        return Coordinate2d(X, Y)
+
 
     def __sub__(self, other):
-        self.__add__(-other)
+        return self.__add__(-other)
