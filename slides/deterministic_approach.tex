@@ -1,6 +1,6 @@
 \section{Deterministic approach}
 \begin{frame} 
-	\frametitle{Estimation of speed from position measurements} 
+	\frametitle{Speed estimation from position measurements} 
 	Consider a car and a (quite inaccurate) model of it
 	\begin{columns}[onlytextwidth,t]
 		\column{.4\textwidth}
@@ -10,7 +10,7 @@
 		\end{figure}
 		\column{.55\textwidth}
 		\begin{block}{The (quite inaccurate) model}
-		Position at time $t$: $(\zeta(t), \xi(t))$ \\%{\footnotesize ($x$ and $y$  will be used later with different a meaning)}\\
+		Position at time $t$: $(\xi(t), \zeta(t))$ \\%{\footnotesize ($x$ and $y$  will be used later with different a meaning)}\\
 		Equations of motion:
 		\begin{align*}
 		  \ddot{\xi}(t)& = \frac{1}{M} u_1(t) \\
@@ -21,8 +21,8 @@
 	
 	where 
 	\begin{itemize}
-		\item $M$ mass of the particle/car\\
-		\item $u_1(t), u_2(t)$ change in acceleration. \textbf{This is the control input}\\
+		\item $M$ mass of the car\\
+		\item $u_1(t), u_2(t)$ acceleration at time $t$. \textbf{This is the control input}\\
         \phantom{x}
 	\end{itemize}
 	\footnotetext{\href{https://commons.wikimedia.org/wiki/File\%3A2015_BMW_i8_(20039281571)_(2).jpg}{\tiny{Image by Edvvc from London, UK (2015 BMW i8)}}}
@@ -196,6 +196,44 @@
     \end{columns}
 \end{frame}
 
+\begin{frame} 
+	\frametitle{Conversion to discrete time}
+	\begin{columns}[onlytextwidth]
+		\column{.4\textwidth}
+		\begin{block}{Continuous time}
+			\begin{align*}
+			\dot{\bm{x}}(t) &= A \bm{x}(t) + B \bm{u}(t)\\
+			\bm{y}(t) &= C \bm{x}(t) 
+			\end{align*}
+			
+			\begin{align*}
+			A&=
+			\mat{0&1&0&0\\0&0&0&0\\0&0&0&1\\0&0&0&0}
+			\\
+			B&=\mat{0&0\\ \frac{1}{M} &0\\0&0 \\0&\frac{1}{M}}
+			\end{align*}
+		\end{block}
+		\column{.2\textwidth}
+		\centering
+		\begin{tikzpicture}
+		\draw [myarrows] (0, 0) -- (1, 0);
+		\end{tikzpicture}
+		\column{.4\textwidth}
+		\begin{block}{Discrete time}
+			\begin{align*}
+			\bm{x}(k+1) &= A_d \bm{x}(k) + B_d \bm{u}(k)\\
+			\bm{y}(k) &= C \bm{x}(k) 
+			\end{align*}
+			
+			\begin{align*}
+			A_d&=\mat{1&\Delta t&0&0\\0&1&0&0\\0&0&1&\Delta t\\0&0&0&1}
+			\\
+			B_d&=\mat{\frac{\Delta t^2}{2}&0\\ \frac{\Delta t}{M} &0\\0&\frac{\Delta t^2}{2} \\0&\frac{\Delta t}{M}}
+			\end{align*}
+		\end{block}
+	\end{columns}
+\end{frame}
+
 \begin{frame}
     \frametitle{Estimation approaches}
     \begin{itemize}
@@ -337,8 +375,16 @@
 	%\insertimptext{Convergency is guranteed for all values of $\tilde{\bm{x}}(0)$}
 	
 \end{frame}
+
 \begin{frame}
     \frametitle{Example}
-    Show movie in (x,y) with the effects of the two estimators
+    True and estimated position of the car, along with the true and estimated speed.
+    \movie{\includegraphics[width=0.8\textwidth]{fig/observer_ex_1}}{video/observer_ex_1.avi}
 \end{frame}
-	
+
+\begin{frame}
+\begin{figure}[b]
+	\frametitle{Speed estimation error}
+	\includegraphics[width=0.8\textwidth]{fig/speed_estimation_error_ex_1}
+\end{figure}
+\end{frame}	
