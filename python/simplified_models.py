@@ -83,6 +83,10 @@ class TrueModel:
             new_speed_x,
             new_speed_y)
 
+    def get_sample_time(self):
+        """Return sample time."""
+        return self.__sample_time
+
 
 class Observer(TrueModel):
     """Luenberger observer of the true model.
