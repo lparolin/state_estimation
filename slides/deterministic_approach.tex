@@ -2,34 +2,40 @@
 \begin{frame} 
 	\frametitle{Speed estimation from position measurements} 
 	Consider a car and a (quite inaccurate) model of it
-	\begin{columns}[onlytextwidth,t]
+	\begin{columns}[onlytextwidth]
 		\column{.4\textwidth}
 		\begin{figure}[h]
 			\includegraphics[width=\textwidth]{fig/auto_real}%
 			\caption*{The car we want to model.\footnotemark} 
 		\end{figure}
-		\column{.55\textwidth}
+		\column{.1\textwidth}
+		\begin{tikzpicture}
+		\draw [myarrows] (0, 0) -- (1, 0);
+		\end{tikzpicture}
+		\column{.4\textwidth}
 		\begin{block}{The (quite inaccurate) model}
 		Position at time $t$: $(\xi(t), \zeta(t))$ \\%{\footnotesize ($x$ and $y$  will be used later with different a meaning)}\\
 		Equations of motion:
 		\begin{align*}
-		  \ddot{\xi}(t)& = \frac{1}{M} u_1(t) \\
-		  \ddot{\zeta}(t)& = \frac{1}{M} u_2(t)
+		  \ddot{\xi}(t)& = u_1(t) \\
+		  \ddot{\zeta}(t)& = u_2(t)
 		\end{align*}
+		where 
+		\begin{itemize}
+			%\item $M$ mass of the car\\
+			\item $u_1(t)$ acceleration along first coordinate, i.e. $\xi$\\
+			\item $u_2(t)$ acceleration along scond coordinate, i.e. $\zeta$ 
+		\end{itemize}
+		These are the control inputs.
 		\end{block}
 	\end{columns}
 	
-	where 
-	\begin{itemize}
-		\item $M$ mass of the car\\
-		\item $u_1(t), u_2(t)$ acceleration at time $t$. \textbf{This is the control input}\\
-        \phantom{x}
-	\end{itemize}
+	
 	\footnotetext{\href{https://commons.wikimedia.org/wiki/File\%3A2015_BMW_i8_(20039281571)_(2).jpg}{\tiny{Image by Edvvc from London, UK (2015 BMW i8)}}}
 \end{frame}
 
 \begin{frame} 
-	\frametitle{Model rewriting}
+	\frametitle{Model rewriting in state space form}
 	It will be convenient in the following, to rewrite the model in a more standard form
     \begin{columns}[onlytextwidth]
     \column{.25\textwidth}
@@ -201,11 +207,12 @@
 	\begin{columns}[onlytextwidth]
 		\column{.4\textwidth}
 		\begin{block}{Continuous time}
+			\vspace*{-1em}
 			\begin{align*}
 			\dot{\bm{x}}(t) &= A \bm{x}(t) + B \bm{u}(t)\\
 			\bm{y}(t) &= C \bm{x}(t) 
 			\end{align*}
-			
+			\vspace*{-2em}
 			\begin{align*}
 			A&=
 			\mat{0&1&0&0\\0&0&0&0\\0&0&0&1\\0&0&0&0}
@@ -219,19 +226,21 @@
 		\draw [myarrows] (0, 0) -- (1, 0);
 		\end{tikzpicture}
 		\column{.4\textwidth}
-		\begin{block}{Discrete time}
+		\begin{block}{Discrete time \footnotemark}
+			\vspace*{-1em}
 			\begin{align*}
 			\bm{x}(k+1) &= A_d \bm{x}(k) + B_d \bm{u}(k)\\
 			\bm{y}(k) &= C \bm{x}(k) 
 			\end{align*}
-			
+			\vspace*{-2em}
 			\begin{align*}
 			A_d&=\mat{1&\Delta t&0&0\\0&1&0&0\\0&0&1&\Delta t\\0&0&0&1}
 			\\
-			B_d&=\mat{\frac{\Delta t^2}{2}&0\\ \frac{\Delta t}{M} &0\\0&\frac{\Delta t^2}{2} \\0&\frac{\Delta t}{M}}
+			B_d&=\mat{\frac{\Delta t^2}{2}&0\\ \Delta t &0\\0&\frac{\Delta t^2}{2} \\0&\Delta t}
 			\end{align*}
 		\end{block}
 	\end{columns}
+\footnotetext{\href{http://users.isy.liu.se/rt/fredrik/edu/sensorfusion/lecture9.pdf}{\small{For the discretization step see e.g., G. Fredrik. \emph{Sensor fusion} (slides)}}}
 \end{frame}
 
 \begin{frame}
@@ -261,19 +270,58 @@
 
 \begin{frame}
     \frametitle{Observer derivation}
-    Assume we know the following
-    \begin{itemize}
-        \item Model and parameters of the system are known
-        \item Input and output are measured without measurement noise
-        \item An initial estimate of the state is known
-    \end{itemize}
-    We could consider then the following equations
-    \begin{align*}
-    \hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k)\\
-    \hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) 
-    \end{align*}
-    
+    \begin{columns}
+    	\column{.4\textwidth}
+			Assume 
+			\begin{itemize}
+			  \item Model and parameters of the system are known
+			  \item Input and output are measured without noise
+			  \item An initial estimate of the state is known $\hat{\bm{x}}(0)$ 
+			\end{itemize}
+			\vspace{1em}
+			We could define the observer as\vspace{-0.8em}
+			\begin{align*}
+				\hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k)\\
+				\hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) 
+			\end{align*}
+		\column{.4\textwidth}
+		\begin{block}{Diagram}
+			\hfill \tikz[na]\node (label1) {True model};\vspace{0.8em}	
+			\begin{tikzpicture}[auto,  >=latex']
+				\node [input, name=input] {};
+				\node [input, name=connection, right of=input]{};
+				\node [block, right of=connection] (blockAB) {$A_d$, $B_d$};
+				\node [input, right of=blockAB] (state) {$x(k)$};
+				\node [block, right of=state] (blockC) {$C$};
+				\node [output, right = 4em of blockC] (output) {$y(k)$};
+				\begin{scope}[on background layer]
+				\draw[fill=blue!55, rounded corners] ($(blockAB.north west)+(-0.1,0.4)$)  rectangle ($(blockC.south east)+(0.2,-0.2)$);
+				\end{scope}
+				
+				\draw [draw,->] (input) -- node {$u(k)$} (blockAB);
+				\draw [->] (blockAB) -- node {$\bm{x}(k)$} (blockC);
+				\draw [->] (blockC) -- node [name=y] {$\bm{y}(k)$}(output);
+				
+				\node [block, below = 3em of blockAB] (blockObserverAB) {$A_d$, $B_d$};
+				\node [block, below = 3em of blockC] (blockObserverC) {$C$};
+				\node [output, right = 4em of blockObserverC] (outputObserver) {};
+				\begin{scope}[on background layer]
+				\draw[fill=red!55, rounded corners] ($(blockObserverAB.north west)+(-0.1,0.3)$)  rectangle ($(blockObserverC.south east)+(0.2,-0.2)$);
+				\end{scope}
+				
+				\draw [draw,->] (connection) |- node {} (blockObserverAB);
+				\draw [draw,->] (blockObserverAB) -- node {$\hat{\bm{x}}(k)$} (blockObserverC);
+				\draw [->] (blockObserverC) -- node [name=y] {$\hat{\bm{y}}(k)$}(outputObserver);
+				
+				%\path[->](Observer) edge (label1);
+			\end{tikzpicture}
+			
+			\hfill \tikz[na]\node (label2) {Observer};
+			
+		\end{block}
+    \end{columns}
 \end{frame}
+
 \begin{frame}
 	\frametitle{Example}
 	Show movie in (x,y) with the effects of the two estimators and the problem 
