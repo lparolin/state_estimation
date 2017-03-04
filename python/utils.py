@@ -95,7 +95,7 @@ class GenerateBaseSimulation:
             state.append(self.__true_model.get_state())
             estimated_state.append(self.__observer.get_state())
             measured_acceleration.append(
-                self.__acceleration[i_step] + self.__output_noise[i_step])
+                self.__acceleration[i_step] + self.__input_noise[i_step])
             measured_position.append(
                 self.__true_model.get_position() + self.__output_noise[i_step])
 
@@ -208,10 +208,41 @@ class GenerateBaseSimulation:
         Computes the largest speed among all of the position-related vectors.
         """
         max_item = self.get_max_vector()
-        max_speed = Coordinate2d(max_item[1], max_item[3])
-
         min_item = self.get_min_vector()
-        min_speed = Coordinate2d(min_item[1], min_item[3])
+        num_speed = self.get_speed_numerical_difference_as_np_array()
+        num_speed_max = np.amax(num_speed, axis=0)
+        num_speed_min = np.amin(num_speed, axis=0)
+
+        #print("max_item:{}".format(max_item))
+        #print("min_item:{}".format(min_item))
+        #print("num_speed:{}".format(num_speed))
+        #print("num_speed_max:{}".format(num_speed_max))
+        #print("num_speed_min:{}".format(num_speed_min))
+
+        if num_speed_max[0] > max_item[1]:
+            max_speed_x = num_speed_max[0]
+        else:
+            max_speed_x = max_item[1]
+
+        if num_speed_max[1] > max_item[3]:
+            max_speed_y = num_speed_max[1]
+        else:
+            max_speed_y = max_item[3]
+
+        max_speed = Coordinate2d(max_speed_x, max_speed_y)
+
+        if num_speed_min[0] < min_item[1]:
+            min_speed_x = num_speed_min[0]
+        else:
+            min_speed_x = min_item[1]
+
+        if num_speed_min[1] < min_item[3]:
+            min_speed_y = num_speed_min[1]
+        else:
+            min_speed_y = min_item[3]
+
+        min_speed = Coordinate2d(min_speed_x, min_speed_y)
+
         return (min_speed, max_speed)
 
     def get_n_time_steps(self):

@@ -323,15 +323,24 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Example}
-	Show movie in (x,y) with the effects of the two estimators and the problem 
+	\frametitle{Open loop observer}
+	Trends of velocities are well tracked. Input is known and system parameters are known.
+	 \begin{figure}
+	 	\includegraphics[width=0.8\textwidth]{fig/observer_ex_0}
+	 	\caption*{}
+	 \end{figure}
+ 	 
+ 	 \insertimptext{\bf{Initial errors on speed and position are not corrected}}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Luenberger observer}
-	Main idea: use the error in the measured variable for correcting the estimated state
+	\frametitle{A possible solution: Luenberger observer}
+	Key idea: use the measured variable for correcting the estimated state
+	\vspace{1em}
 	
-	New equations of the observer\\
+	New equations of the observer
+	\vspace{-1em}
+	
 	\begin{minipage}{0.6\textwidth}
 		\begin{align*}
 		\hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
@@ -365,9 +374,12 @@
 
 \begin{frame}
     \frametitle{Luenberger observer}
-    Main idea: use the error in the measured variable for correcting the estimated state
+    Key idea: use the error in the measured variable for correcting the estimated state
+    \vspace{1em}
     
-    New equations of the observer\\
+    New equations of the observer
+    \vspace{-1em}
+    
     \begin{minipage}{0.6\textwidth}
         \begin{align*}
         \hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
@@ -407,12 +419,12 @@
 	
 	%In this case %$x(k)=(a_d-lc)^k
 	\begin{itemize}
-		\item The value of the error at time $k=0$ is unknown
+		%\item The value of the error at time $k=0$ is unknown
 		\item If $|a_d-lc|<1$, then it is guaranteed that $|\tilde{x}(k+1)< |\tilde{x}(k)|$
 		\item As $k$ grows, it is guaranteed that $|\tilde{x}(k)|$ decreases towards 0
 	\end{itemize}
 
-	The non-scalar case requires all eigenvalues of $A_d-LC$ have absolute value smaller than 1.
+	The non-scalar case requires all eigenvalues of $A_d-LC$ to have absolute value smaller than 1.
 	
 	\begin{figure}[b]
 		\includegraphics[width=0.8\textwidth]{fig/exponential_decay}
@@ -431,8 +443,15 @@
 \end{frame}
 
 \begin{frame}
-\begin{figure}[b]
-	\frametitle{Speed estimation error}
-	\includegraphics[width=0.8\textwidth]{fig/speed_estimation_error_ex_1}
-\end{figure}
-\end{frame}	
+	\frametitle{Estimation with position measurement noise}
+	$\xi(k)$ coordinate is affected by noise with uniform distribution between -2 and 2\\
+	$\zeta(k)$ coordinate is affected by noise with Gaussian distribution with mean 0 and std. deviation 1
+	\includegraphics[width=0.8\textwidth]{fig/observer_ex_2}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Estimation with position and acceleration measurement noise}
+	$u_1(k)$ measurements are affected by noise with uniform distribution between -2 and 2\\
+	$u_2(k)$ measurements are affected by noise with Gaussian distribution with mean 0 and std. deviation 1
+	\includegraphics[width=0.8\textwidth]{fig/observer_ex_3}
+\end{frame}

@@ -58,6 +58,7 @@ def __compute_axis_limit(lowerLeftCorner, upperRightCorner):
         }
     return out_data
 
+
 def set_axes_limits(simulation, axes_list):
     minPosition, maxPosition = simulation.get_min_max_position()
     limits = __compute_axis_limit(minPosition, maxPosition)
@@ -91,7 +92,7 @@ def __plot_position_data(x, y, ax, line_style):
     """Plots (x,y) data on axis ax with line style line_style."""
     ax.plot(x, y, **line_style)
 
-def plot_position_data(simulation, ax1, idx=None):
+def plot_position_data(simulation, ax1, idx=None, plot_measured_position=False):
     true_state = simulation.get_state_as_np_array()
     estimated_state = simulation.get_estimated_state_as_np_array()
     state_shape = true_state.shape
@@ -107,6 +108,15 @@ def plot_position_data(simulation, ax1, idx=None):
     y_data = estimated_state[:, 2]
     line_style = line_def['Observer']
     __plot_position_data(x_data, y_data, ax1, line_style)
+
+    if plot_measured_position:
+        measured_position = simulation.convert_list_to_np_array(
+            simulation.get_measured_position()
+            )
+        x_data = measured_position[:, 0]
+        y_data = measured_position[:, 1]
+        line_style = line_def['MeasuredPosition']
+        __plot_position_data(x_data, y_data, ax1, line_style)
 
 
 def __extract_speed_data(simulation, useXCoordinate=True):
@@ -228,7 +238,8 @@ def animate(i):
     anim.save('observer_ex_1.avi', fps=5, extra_args=['-vcodec', 'libx264', '-pix_fmt', 'yuv420p'])
     HTML(anim.to_html5_video())
 
-def generate_base_figure(simulation, ax1, ax2, ax3):
+def generate_base_figure(simulation, ax1, ax2, ax3,
+                         plot_measured_position=False):
     """Generates figures for the simulation.
 
     Simulation is an object of type GenerateBaseSimulation
@@ -240,6 +251,6 @@ def generate_base_figure(simulation, ax1, ax2, ax3):
 
     set_axes_limits(simulation, (ax1, ax2, ax3))
     set_axes_labels(ax1, ax2, ax3)
-    plot_position_data(simulation, ax1)
+    plot_position_data(simulation, ax1, plot_measured_position=plot_measured_position)
     plot_speed_data_x(simulation, ax2)
     plot_speed_data_y(simulation, ax3)
