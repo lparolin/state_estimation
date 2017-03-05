@@ -1,4 +1,3 @@
-\section{Deterministic approach}
 \begin{frame} 
 	\frametitle{Speed estimation from position measurements} 
 	Consider a car and a (quite inaccurate) model of it
@@ -300,7 +299,7 @@
 				\node [block, right of=state] (blockC) {$C$};
 				\node [output, right = 4em of blockC] (output) {$y(k)$};
 				\begin{scope}[on background layer]
-				\draw[fill=blue!55, rounded corners] ($(blockAB.north west)+(-0.1,0.4)$)  rectangle ($(blockC.south east)+(0.2,-0.2)$);
+				\draw[fill=blue!30, rounded corners] ($(blockAB.north west)+(-0.1,0.4)$)  rectangle ($(blockC.south east)+(0.2,-0.2)$);
 				\end{scope}
 				
 				\draw [draw,->] (input) -- node {$u(k)$} (blockAB);
@@ -311,7 +310,7 @@
 				\node [block, below = 3em of blockC] (blockObserverC) {$C$};
 				\node [output, right = 4em of blockObserverC] (outputObserver) {};
 				\begin{scope}[on background layer]
-				\draw[fill=red!55, rounded corners] ($(blockObserverAB.north west)+(-0.1,0.3)$)  rectangle ($(blockObserverC.south east)+(0.2,-0.2)$);
+				\draw[fill=red!30, rounded corners] ($(blockObserverAB.north west)+(-0.1,0.3)$)  rectangle ($(blockObserverC.south east)+(0.2,-0.2)$);
 				\end{scope}
 				
 				\draw [draw,->] (connection) |- node {} (blockObserverAB);
@@ -443,15 +442,18 @@
 
 \begin{frame}
     \frametitle{Example}
-    True and estimated position of the car, along with the true and estimated speed.
-    \movie{\includegraphics[width=0.8\textwidth]{fig/observer_ex_1}}{video/observer_ex_1.avi}
+    True and estimated position of the car, along with the true and estimated speed
+    %\movie{\includegraphics[width=0.8\textwidth]{fig/observer_ex_1}}{video/observer_ex_1.avi}
+    \begin{figure}
+    	\includegraphics[width=0.9\textwidth]{fig/observer_ex_1}
+    \end{figure}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Estimation with position measurement noise}
 	$\xi(k)$ coordinate is affected by noise with uniform distribution between -2 and 2\\
 	$\zeta(k)$ coordinate is affected by noise with Gaussian distribution with mean 0 and standard deviation 1
-	\begin{figure}[b]
+	\begin{figure}
 		\includegraphics[width=0.9\textwidth]{fig/observer_ex_2}
 	\end{figure}
 \end{frame}
@@ -470,7 +472,7 @@
 	\begin{itemize}
 		\setlength\itemsep{1.5em}
 		\item Numerical difference is a viable approach only when measurement noise is negligible
-		\item Correcting estimation by using feedback from the output compensates for initial estimation errors
+		\item Using feedback from the output can compensate initial estimation errors
 		\item Definition of the observer requires knowledge of the system parameters
 		\item Multiple gains of the observer can be used as long the eigenvalues of $A_d-LC$ have all absolute value smaller than 1
 	\end{itemize}

@@ -43,8 +43,12 @@
 	\end{tikzpicture}%
 }
 \makeatother
+
+\newcommand{\takeaway}[1]{\insertimptext{{#1}}}
 %setbeamercovered{transparent}
-%setbeamertemplate{navigation symbols}{}
+%\setbeamertemplate{navigation symbols}{}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
 \newcommand{\mat}[1]{\begin{bmatrix}#1\end{bmatrix}}
 
@@ -73,7 +77,9 @@
 
 \maketitle
 %\frame{\tableofcontents[currentsection]}
+\section{Luenberger observer}
 \input{deterministic_approach}
-
+\section{Random variables}
+\input{random_variables}
 \end{document}
 	
