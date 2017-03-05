@@ -26,7 +26,7 @@
 			\item $u_1(t)$ acceleration along first coordinate, i.e. $\xi$\\
 			\item $u_2(t)$ acceleration along scond coordinate, i.e. $\zeta$ 
 		\end{itemize}
-		These are the control inputs.
+		%These are the control inputs.
 		\end{block}
 	\end{columns}
 	
@@ -35,13 +35,13 @@
 \end{frame}
 
 \begin{frame} 
-	\frametitle{Model rewriting in state space form}
-	It will be convenient in the following, to rewrite the model in a more standard form
+	\frametitle{Model rewriting}
+	We want to rewrite the model in a form that better higlights the input, output, and state of the system
     \begin{columns}[onlytextwidth]
     \column{.25\textwidth}
         \begin{align*}
-        \ddot{\xi}(t)& = \frac{1}{M} u_1(t) \\
-        \ddot{\zeta}(t)& = \frac{1}{M} u_2(t)
+        \ddot{\xi}(t)& = u_1(t) \\
+        \ddot{\zeta}(t)& = u_2(t)
         \end{align*}
     \column{.1\textwidth}
     \begin{tikzpicture}
@@ -50,7 +50,7 @@
     \column{.8\textwidth}
     	\begin{align*}
     	  \mat{\dot{\xi}\\\ddot{\xi}\\\dot{\zeta}\\\ddot{\zeta}}&=
-          \mat{0&1&0&0\\0&0&0&0\\0&0&0&1\\0&0&0&0}\mat{\xi\\\dot{\xi}\\{\zeta}\\\dot{\zeta}} + \mat{0&0\\ \frac{1}{M} &0\\0&0 \\0&\frac{1}{M}} \mat{u_1(t)\\u_2(t)}\\
+          \mat{0&1&0&0\\0&0&0&0\\0&0&0&1\\0&0&0&0}\mat{\xi\\\dot{\xi}\\{\zeta}\\\dot{\zeta}} + \mat{0&0\\1  &0\\0&0 \\0&1} \mat{u_1(t)\\u_2(t)}\\
           \mat{y_1(t)\\y_2(t)}&=\mat{1&0&0&0\\0&0&1&0}\mat{\xi\\\dot{\xi}\\{\zeta}\\\dot{\zeta}}
     	\end{align*}
     \end{columns}
@@ -58,12 +58,12 @@
 
 \begin{frame} 
     \frametitle{Model rewriting}
-    It will be convenient in the following, to rewrite the model in a more standard form
+	We want to rewrite the model in a form that better higlights the input, output, and state of the system
     \begin{columns}[onlytextwidth]
         \column{.2\textwidth}
         \begin{align*}
-        \ddot{\xi}(t)& = \frac{1}{M} u_1(t) \\
-        \ddot{\zeta}(t)& = \frac{1}{M} u_2(t)
+        \ddot{\xi}(t)& = u_1(t) \\
+        \ddot{\zeta}(t)& = u_2(t)
         \end{align*}
         \vspace*{2em}
         \column{.1\textwidth}
@@ -83,7 +83,7 @@
             {$\mat{{\xi}\\\dot{\xi}\\{\zeta}\\\dot{\zeta}}$};
         }
         + 
-        \mat{0&0\\ \frac{1}{M} &0\\0&0 \\0&\frac{1}{M}} 
+        \mat{0&0\\1 &0\\0&0 \\0&1} 
         \tikz[baseline]{
             \node[fill=blue!10,anchor=base,rounded corners] (input)
             {$\mat{u_1(t)\\u_2(t)}$};
@@ -130,14 +130,14 @@
     %\begin{block}
         \begin{tikzpicture}[auto,  >=latex']
         \node [input, name=input] {};
-        \node [block, right of=input] (blockB) {$B$};
+        \node [block, right = 3em of input] (blockB) {$B$};
         \node [sum, right of=blockB] (sum) {};
         \node [input, right of=sum] (dstate) {$\frac{1}{s}$};
         \node [block, right of=dstate] (integrator) {$\frac{1}{s}$};
         \node [input, right of=integrator] (state) {};
         \node [block, right of=state] (blockC) {$C$};
         \node [block, below of=integrator] (blockA) {$A$};
-        \node [output, right of=blockC] (output) {};
+        \node [output, right = 3em of blockC] (output) {};
         
         \draw [draw,->] (input) -- node {$\bm{u}(t)$} (blockB);
         \draw [->] (blockB) -- node {} (sum);
@@ -154,10 +154,10 @@
     
          \begin{tikzpicture}[auto,  >=latex']
          \node [input, name=input] {};
-         \node [block, right of=input] (blockAB) {$A$, $B$};
+         \node [block, right = 3em of input] (blockAB) {$A$, $B$};
          \node [input, right of=blockAB] (state) {$x(t)$};
          \node [block, right of=state] (blockC) {$C$};
-         \node [output, right of=blockC] (output) {$y(t)$};
+         \node [output, right = 3em of blockC] (output) {$y(t)$};
          
          \draw [draw,->] (input) -- node {$\bm{u}(t)$} (blockAB);
          \draw [->] (blockAB) -- node {$\bm{x}(t)$} (blockC);
@@ -168,10 +168,10 @@
 
 \begin{frame} 
     \frametitle{Conversion to discrete time}
-    Our estimator will be as a discrete time system. We rewrite our original model as a discrete time system. 
+    Our estimator will be as a discrete time system. We need to convert our original model 
     
     \begin{itemize}
-        \item $\Delta t$ denotes the length sampling interval
+        \item $\Delta t$  sampling time interval
         \item $t_0$ initial time stamp
         \item ${\bm{x}}(k)$ is the $k^{th}$ samples of the state, i.e., $\bm{x}(k)=\bm{x}(t_0+k\Delta t)$. Similar notation for input and output
         \item $A_d$: discrete time version of the matrix $A$
@@ -203,7 +203,7 @@
 \end{frame}
 
 \begin{frame} 
-	\frametitle{Conversion to discrete time}
+	\frametitle{System matrices in discrete time}
 	\begin{columns}[onlytextwidth]
 		\column{.4\textwidth}
 		\begin{block}{Continuous time}
@@ -217,7 +217,7 @@
 			A&=
 			\mat{0&1&0&0\\0&0&0&0\\0&0&0&1\\0&0&0&0}
 			\\
-			B&=\mat{0&0\\ \frac{1}{M} &0\\0&0 \\0&\frac{1}{M}}
+			B&=\mat{0&0\\ 1 &0\\0&0 \\0&1}
 			\end{align*}
 		\end{block}
 		\column{.2\textwidth}
@@ -245,12 +245,14 @@
 
 \begin{frame}
     \frametitle{Estimation approaches}
+    We consider two approaches
     \begin{itemize}
-        \item The position of the car is available at every step $k$. Speed could be estimated by numerical differentiation (Numerical differentiation)
-        \item We could try to estimate the \emph{whole} state of the system and then, to extract the speed of the car from the estimated state (Observer approach)
+        \item [1.] Speed could be estimated by numerical differentiation from the measured position (Numerical differentiation)
+        \item [2.] We could estimate the \emph{whole} state of the system and then, extract the speed of the car from the estimated state (Observer approach)
     \end{itemize}
+
      \begin{columns}[t]
-        \column{.5\textwidth}
+        \column{.4\textwidth}
         \begin{block}{1. Numerical differentiation}
             \vspace*{-1em}
             \begin{align*}
@@ -258,12 +260,15 @@
             \hat{\dot{\zeta}}(k)& = \frac{y_2(k) - y_2(k-1)}{\Delta t}
             \end{align*}
         \end{block}
-        \column{.5\textwidth}
+        \column{.6\textwidth}
         \begin{block}{2. Observer}
-            First element of the estimated state
-            $$\hat{\dot{\xi}}(k)= \hat{x}_1(k)$$
-            Third element of the estimated state
-            $$\hat{\dot{\zeta}}(k)=\hat{x}_3(k)$$
+        	\begin{enumerate}
+        		\item [1.] Estimate the \emph{whole} state of the system, $\hat{\bm{x}}(k)$
+        	
+            	\item [2.] Extract speed information from the second and fourth elements of the state, i.e. 
+            	$\hat{\dot{\xi}}(k)= \hat{x}_1(k)$, 
+            	 $\hat{\dot{\zeta}}(k)=\hat{x}_3(k)$
+        	\end{enumerate}
         \end{block}	
     \end{columns} 
 \end{frame}
@@ -323,9 +328,9 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Open loop observer}
+	\frametitle{Open loop observer - Example}
 	Trends of velocities are well tracked. Input is known and system parameters are known.
-	 \begin{figure}
+	 \begin{figure}[b]
 	 	\includegraphics[width=0.8\textwidth]{fig/observer_ex_0}
 	 	\caption*{}
 	 \end{figure}
@@ -414,7 +419,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Scalar case}
+	\frametitle{Exponential decay - scalar case}
 	We focus on the simplified case, where the state is a scalar: $\tilde{x}(k+1)= (a_d-lc)\tilde{x}(k)$
 	
 	%In this case %$x(k)=(a_d-lc)^k
@@ -445,13 +450,30 @@
 \begin{frame}
 	\frametitle{Estimation with position measurement noise}
 	$\xi(k)$ coordinate is affected by noise with uniform distribution between -2 and 2\\
-	$\zeta(k)$ coordinate is affected by noise with Gaussian distribution with mean 0 and std. deviation 1
-	\includegraphics[width=0.8\textwidth]{fig/observer_ex_2}
+	$\zeta(k)$ coordinate is affected by noise with Gaussian distribution with mean 0 and standard deviation 1
+	\begin{figure}[b]
+		\includegraphics[width=0.9\textwidth]{fig/observer_ex_2}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Estimation with position and acceleration measurement noise}
 	$u_1(k)$ measurements are affected by noise with uniform distribution between -2 and 2\\
-	$u_2(k)$ measurements are affected by noise with Gaussian distribution with mean 0 and std. deviation 1
-	\includegraphics[width=0.8\textwidth]{fig/observer_ex_3}
+	$u_2(k)$ measurements are affected by noise with Gaussian distribution with mean 0 and standard deviation 1
+	\begin{figure}
+		\includegraphics[width=0.9\textwidth]{fig/observer_ex_3}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Summary}
+	\begin{itemize}
+		\setlength\itemsep{1.5em}
+		\item Numerical difference is a viable approach only when measurement noise is negligible
+		\item Correcting estimation by using feedback from the output compensates for initial estimation errors
+		\item Definition of the observer requires knowledge of the system parameters
+		\item Multiple gains of the observer can be used as long the eigenvalues of $A_d-LC$ have all absolute value smaller than 1
+	\end{itemize}
+
+\insertimptext{\bf{What would it be the best gain?}}
 \end{frame}

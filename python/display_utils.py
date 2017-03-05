@@ -78,15 +78,15 @@ def set_axes_limits(simulation, axes_list):
     axes_list[2].set_ylim(limits['y_lim_min'], limits['y_lim_max'])
 
 def set_axes_labels(ax_x_y_plane, ax_x_speed, ax_y_speed):
-    ax_x_y_plane.set_xlabel('x coordinate')
-    ax_x_y_plane.set_ylabel('y coordinate')
+    ax_x_y_plane.set_xlabel(r' $\xi$ coordinate')
+    ax_x_y_plane.set_ylabel(r'$\zeta$ coordinate')
     ax_x_y_plane.set_title('Position')
 
     ax_x_speed.set_title('Speed')
-    ax_x_speed.set_ylabel('x coordinate')
+    ax_x_speed.set_ylabel(r'$\xi$ coordinate')
 
     ax_y_speed.set_xlabel('Time stamp')
-    ax_y_speed.set_ylabel('y coordinate')
+    ax_y_speed.set_ylabel(r'$\zeta$ coordinate')
 
 def __plot_position_data(x, y, ax, line_style):
     """Plots (x,y) data on axis ax with line style line_style."""
