@@ -36,8 +36,8 @@
 \newcommand\insertimptext[1]{
 	\begin{tikzpicture}[remember picture,overlay]
 	\node[inner sep=0pt,outer sep=0pt,anchor=south] at ([yshift=20pt]current page.south)
-	{\begin{beamercolorbox}[wd=0.65\paperwidth,ht=3ex,dp=2ex,center]{author in head/foot}
-		\hfill\parbox[c][7ex][c]{0.6\paperwidth}{\centering\footnotesize#1}\hfill\null
+	{\begin{beamercolorbox}[wd=0.75\paperwidth,ht=3ex,dp=2ex,center]{author in head/foot}
+		\hfill\parbox[c][7ex][c]{0.7\paperwidth}{\centering\footnotesize#1}\hfill\null
 		\end{beamercolorbox}
 	};
 	\end{tikzpicture}%
@@ -73,10 +73,10 @@
 
 % By default all math in TikZ nodes are set in inline mode. Change this to
 % displaystyle so that we don't get small fractions.
-%\everymath{\displaystyle}
+\everymath{\displaystyle}
 
 \maketitle
-%\frame{\tableofcontents[currentsection]}
+\frame{\tableofcontents}
 \section{Luenberger observer}
 \input{deterministic_approach}
 \section{Random variables}
