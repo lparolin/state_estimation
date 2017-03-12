@@ -1,0 +1,155 @@
+% Code from http://tex.stackexchange.com/questions/178800/creating-sections-each-with-title-pages-in-beamers-slides
+\begin{frame}
+	\frametitle{State estimation and dynamical system}
+	Consider once again the problem of estimating the speed of the car from the measurements of its position
+	\begin{align*}
+	\hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + B_d \bm{w}(k)\\
+	\hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) + \bm{v}(k)
+	\end{align*}
+	where $\bm{w}(k)$ and $\bm{v}(k)$ are two random processes\\\vspace{0.5em}
+	We want to find an estimate of $\bm{x}(k)$ given the sequence of measurements $\mathcal{Y}_t=\{\bm{y}(0),\bm{y}(1),\ldots,\bm{y}(k)\}$
+	
+	\onslide<2-> A possible approach
+	\begin{itemize}
+		\item Define an optimality criterion
+		\item For all $t$
+		\begin{itemize}
+			\item Compute the conditional density function of $X|\mathcal{Y}_t$ 
+			\item Select the ``best'' value for $X$ given $\mathcal{Y}_t$ based on the optimal criterion
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Problems with the proposed approach}
+	Typically not feasible to compute $f_{X|\mathcal{Y}_t}(x;y)$ at every $t$ \\\vspace{1em}
+	The problem is that $\mathcal{Y}_t$ grows over time
+	\begin{itemize}
+		\item At time 0, we need to compute $f_{X|Y_0}(x;y)$
+		\item At time 1, we need to compute $f_{X|\{Y_1, Y_0\}}(x;y)$
+		\item $\cdots$
+	\end{itemize}
+	\vspace{0.5em}
+	We can simplify a little this problem by relying on conditional independence among variables
+%$$f_{X|Y_t}(x;y)=\frac{f_{Y|X}(x;y)f_{X|Y_t}(x;y)}{f_{X|Y_t}(x;y)}$$
+	
+	\vspace{0.5em}
+	The particle filter aims at approximating $f_{X|Y_t}(x;y)$\\
+	
+	\vspace{0.5em}
+	For some particular case however, the computation of $f_{X|Y_t}(x;y)$ is relatively simple
+	
+%\takeaway{In general, the numerical complexity of computing $f_{X|Y_t}(x;y)$ prevents this approach}
+\end{frame}
+\begin{frame}
+	\frametitle{A particular case}
+	Our system is linear, this is already a very particular case. 
+	\begin{align*}
+	\hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + B_d \bm{w}(k)\\
+	\hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) + \bm{v}(k)
+	\end{align*}
+	Further assume
+	\begin{itemize}
+		\item $\bm{w}(k)$ is a white noise process and for all $k$ $\bm{w}(k)\sim\mathcal{N}(0, Q)$
+		\item $\bm{v}(k)$ is a white noise process and for all $k$ $\bm{v}(k)\sim\mathcal{N}(0, R)$
+		\item $\bm{w}(k)$ and $\bm{v}(k)$ are correlated with correlation matrix $S$, i.e. 
+		$$E\left[\mat{\bm{w}(k)\\\bm{v}(k)}\mat{\bm{w}(k)^T&\bm{v}(k)^T}\right]=\mat{Q&S\\S^T&R}$$
+		%\begin{itemize}
+		%	\item This assumption can be actually lifted
+		%\end{itemize}
+		\item An initial estimate of $\bm{x}(0)$ is available
+		\item The initial estimate is normally distributed with mean $\bm{x}(0)$ and covariance $P(0)$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\vfill
+	\centering
+	\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+		\usebeamerfont{title}Equations of the Kalman filter\par%
+	\end{beamercolorbox}
+	\vfill
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Kalman filter}
+	Developed by Rudolf Emil Kálmán (May 19, 1930 - July 2, 2016)\\
+	Typically divided into two steps: prediction and update\\
+	Multiple implementations are possible, with different numerical accuracy/complexity trade-off \footnote{\href{http://www.cs.unc.edu/~tracker/media/pdf/SIGGRAPH2001_CoursePack_08.pdf}{See for example G. Welch, G. Bishop. ``An Introduction to the Kalman Filter''}}
+	\begin{itemize}
+		\item Prediction step: 
+		\begin{align*}
+		\hat{\bm{x}}(k|k-1)&=A_d \hat{\bm{x}}(k-1|k-1)+SR^{-1}\bm{y}(k-1)+B_d \bm{u}(k-1)\\
+		P(k|k-1)&=A_dP(k-1|k-1)A_d^T+(Q-SR^{-1}S^T)
+		\end{align*} 
+		\item Update step:
+		\begin{align*}
+		S(k)&=CP(k|k-1)C^T+R\\
+		K(k)&=P(k|k-1)C^TS(k)^{-1}\\
+		P(k|k)&=(I-K(k)C)P(k|k-1)(I-K(k)C)^T+K(k)RK(k)^T\\
+		\bm{\epsilon}(k)& = \bm{y}(k) - C\hat{\bm{x}}(k|k-1)\\
+		\hat{\bm{x}}(k|k)&=\hat{\bm{x}}(k|k-1)+K(k)\bm{\epsilon}(k)\\
+		\end{align*} 	
+	\end{itemize}
+\end{frame}
+\begin{frame}
+	\frametitle{Some properties of the Kalman filter}
+	\begin{itemize}\setlength\itemsep{1em}
+		\item Under the previous assumptions, the Kalman filter is optimal
+		\begin{itemize}
+			\item Even among non linear filters
+			\item The couple $(\hat{\bm{x}}(k|k), P(k|k))$ completely describes $f_{X|Y_k}(x;y)$
+		\end{itemize}
+		\item If $w(k)$ and $v(k)$ are not normally distributed, then the Kalman filter is the best \emph{linear} filter
+		\begin{itemize}
+			\item Some other non linear filter could estimate of the state with lower uncertainty
+		\end{itemize}
+		\item The covariance of the state estimate and the gain of the filter \emph{do not depend on measurements}
+		\begin{itemize}
+			\item They could be pre-computed
+		\end{itemize}
+		\item Under mild hypothesis
+		\begin{itemize}
+			\item The Kalman gain converges to a constant $\bar{K}$
+			\item All the eigenvalues of $A-\bar{K}C$ have absolute value smaller than 1
+		\end{itemize} 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Some points to consider}
+	The Kalman filter is a recursive algorithm. Its implementation is often relatively simple\\\vspace{0.5em}
+	We need however, to make sure that numerical errors remain negligible between on step and the following\\\vspace{0.5em}
+	
+	Some of the approaches used for improving the numerical stability of the algorithm are
+	\begin{itemize}\setlength\itemsep{0.5em}
+		\item Pre and post-scaling
+		\item Square root implementation of the Kalman filter \footnote{See for example \href{https://github.com/mherb/kalman}{hier}}
+		%\item Delay in measurements
+		%\item Non-linearity of the system
+	\end{itemize}\vspace{1em}
+	Additionally, when debugging a software implementation of the filter, consider that 
+	\begin{itemize}\setlength\itemsep{0.5em}
+		\item The evolution of the Kalman filter depends on both the estimated state and its covariance
+		\item Both elements should be visualized when debugging the implementation
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Estimation on non-linear filters}
+	Many approaches exist. The goal is always to reach a good-enough approximation of $f_{X|Y_t}$\\\vspace{1em}
+
+	Among recursive filters, often EKF and UKF are used 
+	\begin{itemize}\setlength\itemsep{1em}
+		\item If possible, prefer UKF over EKF
+		\item In both cases, the filter gain will likely depend on the estimated state value
+		\begin{itemize}
+			\item The gain of the filter cannot be computed off-line
+		\end{itemize}
+		\item Verify that the state remains within ``realistic'' regions of the state space
+		\begin{itemize}\setlength\itemsep{0.5em}
+			\item Often, additional steps to constraint the estimate state are used\footnote{See e.g., \href{http://academic.csuohio.edu/simond/pubs/IETKalman.pdf}{D. Simon ``Kalman filtering with state constraints: a survey of linear and nonlinear algorithms''}\\
+			\href{http://folk.ntnu.no/bjarnean/pubs/journals/journal-51.pdf?id=ansatte/Foss_Bjarne/pubs/journals/journal-51.pdf}{S. Kolåsa et al. ``Constrained nonlinear state estimation based on the UKF approach''}}
+		\end{itemize}
+	\end{itemize}
+\end{frame}

@@ -17,7 +17,7 @@
 \usetikzlibrary{arrows,shapes}
 
 % beamer conf
-\usetheme{Warsaw}%{Pittsburgh}%%{CambridgeUS}%{default}%
+\usetheme{Boadilla}%{Madrid}%{Warsaw}%{Pittsburgh}%%{CambridgeUS}%{default}%
 \usecolortheme{seahorse}
 \usefonttheme{professionalfonts}
 
@@ -52,9 +52,19 @@
 
 \newcommand{\mat}[1]{\begin{bmatrix}#1\end{bmatrix}}
 
-\title{Heuristic on state estimation}
+\newcommand{\separatorslide}{% Code from http://tex.stackexchange.com/questions/178800/creating-sections-each-with-title-pages-in-beamers-slides
+	\begin{frame}
+		\vfill
+		\centering
+		\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+			\usebeamerfont{title}\insertsectionhead\par%
+		\end{beamercolorbox}
+		\vfill
+\end{frame}}
+
+\title{Notes on state estimation}
 \author{Luca Parolini}
-\date{\today}
+%\date{\today}
 
 \begin{document}
 	
@@ -80,6 +90,10 @@
 \section{Luenberger observer}
 \input{deterministic_approach}
 \section{Random variables}
+\separatorslide
 \input{random_variables}
+\section{Kalman filter}
+\separatorslide
+\input{kalman_filter}
 \end{document}
 	

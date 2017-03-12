@@ -1,5 +1,5 @@
 \begin{frame} 
-	\frametitle{Speed estimation from position measurements} 
+	\frametitle{Computing speed from the measurements of position} 
 	Consider a car and a (quite inaccurate) model of it
 	\begin{columns}[onlytextwidth]
 		\column{.4\textwidth}
@@ -22,8 +22,8 @@
 		where 
 		\begin{itemize}
 			%\item $M$ mass of the car\\
-			\item $u_1(t)$ acceleration along first coordinate, i.e. $\xi$\\
-			\item $u_2(t)$ acceleration along scond coordinate, i.e. $\zeta$ 
+			\item $u_1(t)$ acceleration along first coordinate\\%, i.e. $\xi$\\
+			\item $u_2(t)$ acceleration along second coordinate\\%, i.e. $\zeta$ 
 		\end{itemize}
 		%These are the control inputs.
 		\end{block}
@@ -35,7 +35,7 @@
 
 \begin{frame} 
 	\frametitle{Model rewriting}
-	We want to rewrite the model in a form that better higlights the input, output, and state of the system
+	We want to rewrite the model in a form that better highlights \emph{input}, \emph{output}, and \emph{state} of the system
     \begin{columns}[onlytextwidth]
     \column{.25\textwidth}
         \begin{align*}
@@ -57,7 +57,7 @@
 
 \begin{frame} 
     \frametitle{Model rewriting}
-	We want to rewrite the model in a form that better higlights the input, output, and state of the system
+	We want to rewrite the model in a form that better highlights \emph{input}, \emph{output}, and \emph{state} of the system
     \begin{columns}[onlytextwidth]
         \column{.2\textwidth}
         \begin{align*}
@@ -111,7 +111,7 @@
 
 \begin{frame} 
     \frametitle{State space form}
-    The names $A$, $B$, $C$ are often used in state space form. We can write 
+    The names $A$, $B$, $C$ are often used for the matrices in state space form. We can write 
     \begin{align*}
     \dot{\bm{x}}(t) &= A \bm{x}(t) + B \bm{u}(t)\\
     \bm{y}(t) &= C \bm{x} (t)
@@ -125,7 +125,7 @@
             \item ${\bm{u}}(t)=\mat{u_1(t)\\u_2(t)}$ input
         \end{itemize}
     \column{.5\textwidth}
-    A graphical representation can be given as
+    A graphical representation\vspace{0.5em}
     %\begin{block}
         \begin{tikzpicture}[auto,  >=latex']
         \node [input, name=input] {};
@@ -177,8 +177,8 @@
         \item $B_d$: discrete time version of the matrix $B$
     \end{itemize}
      
-    \begin{columns}[onlytextwidth]
-        \column{.4\textwidth}
+    \begin{columns}%[onlytextwidth]
+        \column{.35\textwidth}
         \begin{block}{Continuous time}
             \vspace*{-1em}
             \begin{align*}
@@ -187,10 +187,12 @@
             \end{align*}
         \end{block}    
         \column{.1\textwidth}
-        \begin{tikzpicture}
-        \draw [myarrows] (0, 0) -- (1, 0);
-        \end{tikzpicture}
-        \column{.4\textwidth}
+        \begin{center}
+        	\begin{tikzpicture}
+        	\draw [myarrows] (0, 0) -- (1, 0);
+        	\end{tikzpicture}
+        \end{center}
+        \column{.35\textwidth}
         \begin{block}{Discrete time}
             \vspace*{-1em}
             \begin{align*}
@@ -202,7 +204,7 @@
 \end{frame}
 
 \begin{frame} 
-	\frametitle{System matrices in discrete time}
+	\frametitle{Matrices for the discrete time system}
 	\begin{columns}[onlytextwidth]
 		\column{.4\textwidth}
 		\begin{block}{Continuous time}
@@ -221,9 +223,11 @@
 		\end{block}
 		\column{.2\textwidth}
 		\centering
+		%\vspace*{\fill}
 		\begin{tikzpicture}
 		\draw [myarrows] (0, 0) -- (1, 0);
 		\end{tikzpicture}
+		%\vspace*{\fill}
 		\column{.4\textwidth}
 		\begin{block}{Discrete time \footnotemark}
 			\vspace*{-1em}
@@ -239,15 +243,15 @@
 			\end{align*}
 		\end{block}
 	\end{columns}
-\footnotetext{\href{http://users.isy.liu.se/rt/fredrik/edu/sensorfusion/lecture9.pdf}{\small{For the discretization step see e.g., G. Fredrik. \emph{Sensor fusion} (slides)}}}
+\footnotetext{\href{http://users.isy.liu.se/rt/fredrik/edu/sensorfusion/lecture9.pdf}{\small{For the discretization step see, e.g., G. Fredrik. \emph{Sensor fusion} (slides)}}}
 \end{frame}
 
 \begin{frame}
     \frametitle{Estimation approaches}
-    We consider two approaches
-    \begin{itemize}
-        \item [1.] Speed could be estimated by numerical differentiation from the measured position (Numerical differentiation)
-        \item [2.] We could estimate the \emph{whole} state of the system and then, extract the speed of the car from the estimated state (Observer approach)
+    We consider two approaches\vspace{1em}
+    \begin{itemize}\setlength\itemsep{0.5em}
+        \item [1.] \emph{Numerical differentiation}: speed could be estimated by numerical differentiation from the measured position
+        \item [2.] \emph{Observer}: we could estimate the \emph{whole} state of the system and then, extract the speed of the car from the estimated state
     \end{itemize}
 
      \begin{columns}[t]
@@ -259,7 +263,7 @@
             \hat{\dot{\zeta}}(k)& = \frac{y_2(k) - y_2(k-1)}{\Delta t}
             \end{align*}
         \end{block}
-        \column{.6\textwidth}
+        \column{.5\textwidth}
         \begin{block}{2. Observer}
         	\begin{enumerate}
         		\item [1.] Estimate the \emph{whole} state of the system, $\hat{\bm{x}}(k)$
@@ -363,59 +367,80 @@
 	\pause
 	Consider now the error on the estimated state: $\tilde{\bm{x}}(k)=\bm{x}(k)-\hat{\bm{x}}(k)$. We can write\\[-1.5em]
 	\begin{align*}
-	\hat{\bm{x}}(k+1)-\bm{x}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) -  
-	A_d \hat{\bm{x}}(k) - B_d \bm{u}(k) - L(\bm{y}(k)-\hat{\bm{y}}(k))\\
-	\tilde{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
+	\tilde{\bm{x}}(k+1) &=\bm{x}(k+1) - \hat{\bm{x}}(k+1)\\
+	 &= A_d \bm{x}(k) + B_d \bm{u}(k) -  
+	\left(A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + L(\bm{y}(k)-\hat{\bm{y}}(k))\right)\\
+	 &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
 	A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
-	\tilde{\bm{x}}(k+1) &= (A_d - LC)\bm{x}(k)-(A_d-LC) \hat{\bm{x}}(k) \\ 
-	\tilde{\bm{x}}(k+1)&=(A_d - LC)\tilde{\bm{x}}(k1) 
+	 &= (A_d - LC)\bm{x}(k)-(A_d-LC) \hat{\bm{x}}(k) \\ 
+	 &=(A_d - LC)\tilde{\bm{x}}(k) 
 	\end{align*}
 	
-	\pause
-	The equation can be rewritten as\hfill \\
-	$\qquad\tilde{\bm{x}}(k)=(A_d-LC)^k\tilde{\bm{x}}(0)$
+	%\pause
+	%The equation can be rewritten as\hfill \\
+	%$\qquad\tilde{\bm{x}}(k)=(A_d-LC)^k\tilde{\bm{x}}(0)$
 \end{frame}
+
 
 \begin{frame}
-    \frametitle{Luenberger observer}
-    Key idea: use the error in the measured variable for correcting the estimated state
-    \vspace{1em}
-    
-    New equations of the observer
-    \vspace{-1em}
-    
-    \begin{minipage}{0.6\textwidth}
-        \begin{align*}
-        \hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
-            \tikz[baseline]{
-            \node[fill=blue!10,anchor=base,rounded corners] (corr_term)
-            {$L(\bm{y}(k)-\hat{\bm{y}}(k))$};}\\
-        \hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) 
-        \end{align*}
-    \end{minipage}
-    \begin{minipage}{0.3\textwidth}
-        \tikz[na]\node (descr) {Correcting term}; 
-    \end{minipage}
-    \begin{tikzpicture}[overlay]
-        \path[->](corr_term) edge (descr);
-    \end{tikzpicture}\\[2em] 
-    Consider now the error on the estimated state: $\tilde{\bm{x}}(k)=\bm{x}(k)-\hat{\bm{x}}(k)$. We can write\\[-1.5em]
-    \begin{align*}
-        \hat{\bm{x}}(k+1)-\bm{x}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) -  
-        A_d \hat{\bm{x}}(k) - B_d \bm{u}(k) - L(\bm{y}(k)-\hat{\bm{y}}(k))\\
-        \tilde{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
-        A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
-        \tilde{\bm{x}}(k+1) &= (A_d - LC)\bm{x}(k)-(A_d-LC) \hat{\bm{x}}(k) \\ 
-        \tilde{\bm{x}}(k+1)&= \tikz[baseline]{\node[fill=blue!10,anchor=base,rounded corners](dyn_err){$(A_d - LC)$};}\tilde{\bm{x}}(k1) \tikz[baseline]{\node[fill=blue!10,anchor=base,rounded corners](no_input){+ \phantom{x}};}
-    \end{align*}
-
-	The equation can be rewritten as\hfill \tikz[na]\node (no_input_comment) {No dependence on input};\\
-	$\qquad\tilde{\bm{x}}(k)=(A_d-LC)^k\tilde{\bm{x}}(0)$\hfill \tikz[na]\node (comment) {Dynamics of the state estimation error};
+	\frametitle{A possible solution: Luenberger observer}
+	Key idea: use the measured variable for correcting the estimated state
+	\vspace{1em}
+	
+	New equations of the observer
+	\vspace{-1em}
+	
+	\begin{minipage}{0.6\textwidth}
+		\begin{align*}
+		\hat{\bm{x}}(k+1) &= A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + 
+		\tikz[baseline]{
+			\node[fill=blue!10,anchor=base,rounded corners] (corr_term)
+			{$L(\bm{y}(k)-\hat{\bm{y}}(k))$};}\\
+		\hat{\bm{y}}(k) &= C\hat{\bm{x}}(k) 
+		\end{align*}
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}
+		\tikz[na]\node (descr) {Correcting term}; 
+	\end{minipage}
 	\begin{tikzpicture}[overlay]
-		\path[->] (no_input_comment) edge (no_input);
-		\path[->] (comment) edge (dyn_err);
+	\path[->](corr_term) edge (descr);
+	\end{tikzpicture}\\[2em] 
+	\pause
+	Consider now the error on the estimated state: $\tilde{\bm{x}}(k)=\bm{x}(k)-\hat{\bm{x}}(k)$. We can write\\[-1.5em]
+	\begin{align*}
+	\tilde{\bm{x}}(k+1) &=\bm{x}(k+1) - \hat{\bm{x}}(k+1)\\
+	&= A_d \bm{x}(k) + B_d \bm{u}(k) -  
+	\left(A_d \hat{\bm{x}}(k) + B_d \bm{u}(k) + L(\bm{y}(k)-\hat{\bm{y}}(k))\right)\\
+	&= A_d \hat{\bm{x}}(k)- LC\bm{x}(k) -  
+	A_d \hat{\bm{x}}(k) + LC\hat{\bm{y}}(k)\\
+	&= (A_d - LC)\bm{x}(k)-(A_d-LC) \hat{\bm{x}}(k) \\
+	&=\tikz[baseline]{\node[fill=blue!10,anchor=base,rounded corners](dyn_err){$(A_d - LC)$};}\tilde{\bm{x}}(k) \tikz[baseline]{\node[fill=blue!10,anchor=base,rounded corners](no_input){  \phantom{x}};} 
+	%&=(A_d - LC)\tilde{\bm{x}}(k) 
+	\end{align*}
+	
+	\tikz[na]\node (comment) {Dynamics of the estimation error};\hspace{1em} \tikz[na]\node (no_input_comment) {Input values have no effect on error dynamics};
+	
+	\begin{tikzpicture}[overlay]
+	\path[->] (no_input_comment) edge (no_input);
+	\path[->] (comment) edge (dyn_err);
 	\end{tikzpicture}
+	
+	%\pause
+	%The equation can be rewritten as\hfill \\
+	%$\qquad\tilde{\bm{x}}(k)=(A_d-LC)^k\tilde{\bm{x}}(0)$
 \end{frame}
+
+%\begin{frame}
+%	\frametitle{David Luenberger}
+%	\begin{columns}
+%		\column{0.5\textwidth}
+%		\begin{itemize}
+%			\item Born September 16, 1937
+%			\item \url{https://profiles.stanford.edu/david-luenberger?tab=bio}
+%		\end{itemize}
+%		\column{0.5\textwidth}
+%	\end{columns}
+%\end{frame}
 
 \begin{frame}
 	\frametitle{Exponential decay - scalar case}
@@ -423,17 +448,17 @@
 	%In this case %$x(k)=(a_d-lc)^k
 	\begin{itemize}
 		%\item The value of the error at time $k=0$ is unknown
-		\item If $|a_d-lc|<1$, then $|\tilde{x}(k+1)< |\tilde{x}(k)|$ for all $k\geq0$
+		\item If $|a_d-lc|<1$, then $\tilde{x}(k)$ will tend to 0 for all values of $\tilde{x}(0)$
 	% 	\item As $k$ grows, it is guaranteed that $|\tilde{x}(k)|$ decreases towards 0
 	\end{itemize}
 
 	\begin{figure}[b]
-		\includegraphics[width=0.8\textwidth]{fig/exponential_decay}
+		\includegraphics[width=0.9\textwidth]{fig/exponential_decay}
 		%\caption*{Exponential decay for different values of $a_d-lc$.}
 	\end{figure}
 	
 	%The non-scalar case requires all eigenvalues of $A_d-LC$ to have absolute value smaller than 1.
-	\takeaway{If $|a_d-lc|<1$, then $\tilde{x}(k)$ tends to 0 for all values $\tilde{x}(0)$}
+	%\takeaway{If $|a_d-lc|<1$, then $\tilde{x}(k)$ tends to 0 for all values $\tilde{x}(0)$}
 	
 	%\insertimptext{Convergency is guranteed for all values of $\tilde{\bm{x}}(0)$}
 	
@@ -450,8 +475,8 @@
 
 \begin{frame}
 	\frametitle{Estimation with position measurement noise}
-	$\xi(k)$ coordinate is affected by noise with uniform distribution between -2 and 2\\
-	$\zeta(k)$ coordinate is affected by noise with Gaussian distribution with mean 0 and standard deviation 1
+	$\xi(k)$ coordinate is affected by noise uniformly distributed between -2 and 2\\
+	$\zeta(k)$ coordinate is affected by noise having Gaussian distribution with mean 0 and standard deviation 1
 	\begin{figure}
 		\includegraphics[width=0.9\textwidth]{fig/observer_ex_2}
 	\end{figure}
@@ -471,9 +496,11 @@
 	\begin{itemize}
 		\setlength\itemsep{1.5em}
 		\item Numerical difference is a viable approach only when measurement noise is negligible
-		\item Using feedback from the output can compensate initial estimation errors
 		\item Definition of the observer requires knowledge of the system parameters
-		\item Multiple gains of the observer can be used as long the eigenvalues of $A_d-LC$ have all absolute value smaller than 1
+		\item Using feedback from the output can compensate initial estimation errors
+		\item Multiple gains of the observer can be used
+		\item All eigenvalues of $A_d-LC$ have absolute value smaller than 1
+		\item For information see, among others, \href{http://cse.lab.imtlucca.it/~bemporad/teaching/ac/pdf/06b-estimator.pdf}{A. Bemporad. State estimation and linear observer}
 	\end{itemize}
 
 \insertimptext{\bf{What would it be the best gain?}}
