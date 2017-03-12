@@ -1,7 +1,7 @@
-sudo: required
-dist: trusty
-before_install:
-- sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended
+# sudo: required
+# dist: trusty
+# before_install:
+# - sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended
 language: python
 python:
 #  - "2.7"
@@ -13,7 +13,7 @@ python:
 # command to run tests
 script:
   - cd python && pytest
-  - cd ..
-  - cd slides
-  - mkdir _build
-  - pdflatex -interaction=nonstopmode -halt-on-error -output-directory _build state_estimation.tex
+ # - cd ..
+ # - cd slides
+ # - mkdir _build
+ # - pdflatex -interaction=nonstopmode -halt-on-error -output-directory _build state_estimation.tex
