@@ -3,3 +3,5 @@
 A container of concepts around state estimations and observers
 
 The current version of the slides can be found [here](slides/state_estimation.pdf)
+
+Feedback and support in improving the content is always welcome!
