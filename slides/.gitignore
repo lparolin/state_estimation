@@ -23,5 +23,5 @@
 *.synctex.gz
 *.nav
 *.snm
-*.pdf
-
+_build
+# *.pdf
